@@ -1,5 +1,6 @@
 import os
 import subprocess
+import time
 
 def bash(cmd, read=False):
 	if read:
@@ -48,16 +49,23 @@ def showWA():
 		bash('xdotool windowactivate ' + i)
 
 def runWA():
-	bash('env BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/walc_walc.desktop /snap/bin/walc')
+	bash('walc')
+
+def runWAhidden():
+	subprocess.Popen('walc')
 
 def main():
-	run, visible = isRunning(), isVisible()
-	if run:
+	running, visible = isRunning(), isVisible()
+	if running:
 		if visible:
 			hideWA()
 		else:
-			showWA()
+			runWA()
 	else:
-		runWA()
-		# showWA()
+		runWAhidden()
+		time.sleep(1)
+		print('relaunching!!!')
+		subprocess.Popen(['python3', '/home/tubbadu/code/GitHub/WhatsappToggle/WhatsappToggle.py'])
+		print("finitoooooo")
+		exit()
 main()
