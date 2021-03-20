@@ -46,7 +46,10 @@ def showWA():
 	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
 	i = IDs[-1]
 	bash('xdotool windowraise ' + i)
-	bash('xdotool windowactivate ' + i)
+	msg = bash('xdotool windowactivate ' + i, read=True)
+	if msg == '':
+		print("walc has been closed but it's still running in the background.\nrerunning...")
+		runWAhidden()
 
 def runWAhidden():
 	subprocess.Popen(['walc'])
@@ -63,7 +66,8 @@ def main():
 			if focused:
 				hideWA()
 			else:
-				focusWA()
+					focusWA()
+
 		else:
 			showWA()
 	else:
