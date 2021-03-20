@@ -2,8 +2,8 @@
 toggle WALC application!
 
 ## dependencies:
-```walc``` of course :P
-```xdotool```
++ ```walc``` of course :P
++ ```xdotool```
 
 ## preparation
 + set a window rule to exclude walc application from task manager and from window switcher
