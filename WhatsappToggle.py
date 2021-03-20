@@ -1,6 +1,5 @@
 import os
 import subprocess
-import time
 
 def bash(cmd, read=False):
 	if read:
@@ -12,12 +11,6 @@ def bash(cmd, read=False):
 	else:
 		os.system(cmd)
 		return
-
-def alignWA():
-	bash('ID=$(xdotool search --onlyvisible --name walc) && xdotool windowmove $ID 0 0')
-
-def launchWA():
-	bash('walc')
 
 def isRunning(): #even in the background
 	x = bash("pgrep walc", read=True)
@@ -37,35 +30,44 @@ def isVisible():
 		print("visible")
 		return True
 
+def isFocused():
+	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
+	if 'walc' in x.lower():
+		return True
+	else:
+		return False
+
 def hideWA():
 	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
-	for i in IDs:
-		bash('xdotool windowminimize ' + i)
+	i = IDs[-1]
+	bash('xdotool windowminimize ' + i)
 
 def showWA():
 	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
-	for i in IDs:
-		bash('xdotool windowraise ' + i)
-		bash('xdotool windowactivate ' + i)
-
-def runWA():
-	bash('walc')
+	i = IDs[-1]
+	bash('xdotool windowraise ' + i)
+	bash('xdotool windowactivate ' + i)
 
 def runWAhidden():
-	subprocess.Popen('walc')
+	subprocess.Popen(['walc'])
+
+def focusWA():
+	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
+	i = IDs[-1]
+	bash('xdotool windowactivate ' + i)
 
 def main():
-	running, visible = isRunning(), isVisible()
+	running, visible, focused = isRunning(), isVisible(), isFocused()
 	if running:
 		if visible:
-			hideWA()
+			if focused:
+				hideWA()
+			else:
+				focusWA()
 		else:
-			runWA()
+			showWA()
 	else:
 		runWAhidden()
-		time.sleep(1)
-		print('relaunching!!!')
-		subprocess.Popen(['python3', '/home/tubbadu/code/GitHub/WhatsappToggle/WhatsappToggle.py'])
-		print("finitoooooo")
+		runWAhidden()
 		exit()
 main()
