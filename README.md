@@ -2,6 +2,7 @@
 toggle WALC application!
 
 ## dependencies:
+```walc``` of course :P
 ```xdotool```
 
 ## preparation
