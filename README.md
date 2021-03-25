@@ -2,7 +2,7 @@
 toggle WALC application!
 
 ## dependencies:
-+ ```walc``` of course :P
++ ```walc``` of course :P (or ```walc.AppImage```)
 + ```xdotool```
 
 ## preparation
