@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+cmd = "/home/tubbadu/code/GitHub/WhatsappToggle/walc.AppImage"
+
 def bash(cmd, read=False):
 	if read:
 		try:
@@ -52,7 +54,7 @@ def showWA():
 		runWAhidden()
 
 def runWAhidden():
-	subprocess.Popen(['walc'])
+	subprocess.Popen([cmd])
 
 def focusWA():
 	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
