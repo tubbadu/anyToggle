@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 import subprocess
 
@@ -16,8 +18,9 @@ def bash(cmd, read=False):
 
 def isRunning(): #even in the background
 	x = bash("pgrep walc", read=True)
+	print(f"running? <{x}>")
 	if not x:
-		print("not running")
+		print(f"not running: <{x}>")
 		return False
 	else:
 		print("running")
@@ -35,8 +38,10 @@ def isVisible():
 def isFocused():
 	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
 	if 'walc' in x.lower():
+		print("is focused")
 		return True
 	else:
+		print("is not focused")
 		return False
 
 def hideWA():
@@ -51,7 +56,7 @@ def showWA():
 	msg = bash('xdotool windowactivate ' + i, read=True)
 	if msg == '':
 		print("walc has been closed but it's still running in the background.\nrerunning...")
-		runWAhidden()
+		#runWAhidden()
 
 def runWAhidden():
 	subprocess.Popen([cmd])
@@ -74,6 +79,6 @@ def main():
 			showWA()
 	else:
 		runWAhidden()
-		runWAhidden()
+		#runWAhidden()
 		exit()
 main()
