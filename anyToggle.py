@@ -3,8 +3,10 @@
 import os
 import subprocess
 
-cmd = "/home/tubbadu/code/GitHub/WhatsappToggle/walc.AppImage"
-
+# ### change the followings with the program you wish to toggle ###
+cmd = "ferdi" #command to launch the program (may be a path to an appimage or a script as well)
+appName = "ferdi" #name of the application to search for and raise/minimize
+# ### ###
 def bash(cmd, read=False):
 	if read:
 		try:
@@ -17,7 +19,7 @@ def bash(cmd, read=False):
 		return
 
 def isRunning(): #even in the background
-	x = bash("pgrep walc", read=True)
+	x = bash(f"pgrep {appName}", read=True)
 	print(f"running? <{x}>")
 	if not x:
 		print(f"not running: <{x}>")
@@ -27,7 +29,7 @@ def isRunning(): #even in the background
 		return True
 
 def isVisible():
-	x = bash("xdotool search --onlyvisible --name walc", read=True)
+	x = bash(f"xdotool search --onlyvisible --name {appName}", read=True)
 	if not x:
 		print('not visible')
 		return False
@@ -37,7 +39,7 @@ def isVisible():
 
 def isFocused():
 	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
-	if 'walc' in x.lower():
+	if appName in x.lower():
 		print("is focused")
 		return True
 	else:
@@ -45,24 +47,24 @@ def isFocused():
 		return False
 
 def hideWA():
-	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
+	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
 	i = IDs[-1]
 	bash('xdotool windowminimize ' + i)
 
 def showWA():
-	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
+	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
 	i = IDs[-1]
 	bash('xdotool windowraise ' + i)
 	msg = bash('xdotool windowactivate ' + i, read=True)
 	if msg == '':
-		print("walc has been closed but it's still running in the background.\nrerunning...")
-		#runWAhidden()
+		print(f"{appName} has been closed but it's still running in the background.\nrerunning...")
+		runWAhidden()
 
 def runWAhidden():
 	subprocess.Popen([cmd])
 
 def focusWA():
-	IDs = bash("xdotool search --name walc", read=True).strip().split('\n')
+	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
 	i = IDs[-1]
 	bash('xdotool windowactivate ' + i)
 

@@ -1,17 +1,23 @@
-# Whatsapp Toggle 
-toggle WALC application!
+# anyToggle
+
+toggle ANY application!
 
 ## dependencies:
-+ ```walc``` of course :P (or ```walc.AppImage```)
-+ ```xdotool```
 
-## preparation
-+ set a window rule to exclude walc application from task manager and from window switcher
-+ if you want, fix its position (also as a window rule) and remove the border and buttons
-+ assign this script to a button in a panel, so that it will be faster to call it with just a click
++ a linux distribution (successfully tested on Kubuntu 21.04)
++ `python3` 
++ `xdotool`
 
-## other applications
-could be extended to other applications, but needs a bit of work because:
-+ `IDs[-1]` works for walc because it always has 3 process, and the last one is the GUI one, with other applications you'll need to change the selector, eventually use a `for i in IDs` and raise / minimize every istances of the application, so that only the GUI ones will be involved
-+ the double `runWAhidden()` works for walc because the first one launches the program and the second one raises it, with other applications it may work differently
+## preparation:
+
++ create a custom shortcut (mine is META+W) that run `path/to/script/anyToggle.py`, or assign this command to a button or a launcher in a panel
++ *[optional]* set a window rule to exclude your application from task manager and from window switcher
++ *[optional]* if you want, fix its position (also as a window rule) and remove the border and buttons
+
+## known issues:
+
+* some application, if the window is closed but they are still running in the background, when relaunched, intead of recreating the window, launch a new istance. I don't know how to get around of this problem 😞
+
+* while searching for the application to toggle, this script only checks for the name of each window, so if a browser tab or any other application has *appName* in their title, the script will eventually toggle those window
+
 
