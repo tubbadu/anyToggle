@@ -20,4 +20,6 @@ toggle ANY application!
 
 * while searching for the application to toggle, this script only checks for the name of each window, so if a browser tab or any other application has *appName* in their title, the script will eventually toggle those window
 
+## TODO:
 
+* add the possibility to call the script with appName and cmd as parameters, so you don't need different copies of the script for different applications (very fast to implement, i'm just lazy)
