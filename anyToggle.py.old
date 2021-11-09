@@ -14,13 +14,24 @@ def bash(cmd, read=False):
 	else:
 		os.system(cmd)
 		return
+	
+if __name__ == "__main__":
+	# ### change the followings with the program you wish to toggle ### no i was joking don't touch them
+	cmd = sys.argv[1] #"ferdi" #command to launch the program (may be a path to an appimage or a script as well)
+	appName = sys.argv[2] #"ferdi" #name of the application to search for and raise/minimize
 
+if "--ctr" in sys.argv:
+	cmdToRaise = True
+else:
+	cmdToRaise = False
 
-
-
+try:
+	i = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')[-1]
+except:
+	i = 0
 # ### ###
 
-def isRunning(appName): #even in the background
+def isRunning(): #even in the background
 	x = bash(f"pgrep {appName}", read=True)
 	if not x:
 		print(f"not running")
@@ -29,7 +40,7 @@ def isRunning(appName): #even in the background
 		print("running")
 		return True
 
-def isVisible(appName):
+def isVisible():
 	x = bash(f"xdotool search --onlyvisible --name {appName}", read=True)
 	if not x:
 		print('not visible')
@@ -38,7 +49,7 @@ def isVisible(appName):
 		print("visible")
 		return True
 
-def isFocused(appName):
+def isFocused():
 	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
 	if appName in x.lower():
 		print("focused")
@@ -48,30 +59,38 @@ def isFocused(appName):
 		return False
 
 
-def minimize(ID):
-	bash('xdotool windowminimize ' + str(ID))
+def minimize():
+	bash('xdotool windowminimize ' + str(i))
 
-def raises(ID): #in realtà non serve a un cazzo ma vabè
-	bash('xdotool windowraise ' + str(ID))
+def raises(): #in realtà non serve a un cazzo ma vabè
+	bash('xdotool windowraise ' + str(i))
 
-def focus(ID):
-	bash('xdotool windowactivate ' + str(ID))
+def focus():
+	bash('xdotool windowactivate ' + str(i))
 
 
 
-def showWindow(ID, cmd, cmdToRaise):
-	raises(ID)
-	msg = bash('xdotool windowactivate ' + ID, read=True)
+def hideWindow():
+	minimize()
+
+def showWindow():
+	raises()
+	msg = bash('xdotool windowactivate ' + i, read=True)
 	if msg == '':
-		#print(f"{appName} has been closed but it's still running in the background.\nrerunning...")
+		print(f"{appName} has been closed but it's still running in the background.\nrerunning...")
 		if cmdToRaise: bash(cmd)
-		else: runHidden(cmd)
+		else: runHidden()
 		
-		focus(ID)
+		focusWindow()
 
-def runHidden(cmd):
+def runHidden():
 	subprocess.Popen([cmd])
 
+def focusWindow():
+	focus()
+	
+def raiseWindow():
+	raises()
 
 
 
@@ -98,5 +117,4 @@ def main():
 		exit()
 		
 if __name__ == "__main__":
-	pass
-	#main()
+	main()
