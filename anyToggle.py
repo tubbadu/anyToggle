@@ -2,11 +2,8 @@
 
 import os
 import subprocess
+import sys
 
-# ### change the followings with the program you wish to toggle ###
-cmd = "ferdi" #command to launch the program (may be a path to an appimage or a script as well)
-appName = "ferdi" #name of the application to search for and raise/minimize
-# ### ###
 def bash(cmd, read=False):
 	if read:
 		try:
@@ -17,12 +14,27 @@ def bash(cmd, read=False):
 	else:
 		os.system(cmd)
 		return
+	
+
+# ### change the followings with the program you wish to toggle ### no i was joking don't touch them
+cmd = sys.argv[1] #"ferdi" #command to launch the program (may be a path to an appimage or a script as well)
+appName = sys.argv[2] #"ferdi" #name of the application to search for and raise/minimize
+
+if "--ctr" in sys.argv:
+	cmdToRaise = True
+else:
+	cmdToRaise = False
+
+try:
+	i = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')[-1]
+except:
+	i = 0
+# ### ###
 
 def isRunning(): #even in the background
 	x = bash(f"pgrep {appName}", read=True)
-	print(f"running? <{x}>")
 	if not x:
-		print(f"not running: <{x}>")
+		print(f"not running")
 		return False
 	else:
 		print("running")
@@ -40,47 +52,69 @@ def isVisible():
 def isFocused():
 	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
 	if appName in x.lower():
-		print("is focused")
+		print("focused")
 		return True
 	else:
-		print("is not focused")
+		print("not focused")
 		return False
 
-def hideWA():
-	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
-	i = IDs[-1]
-	bash('xdotool windowminimize ' + i)
 
-def showWA():
-	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
-	i = IDs[-1]
-	bash('xdotool windowraise ' + i)
+def minimize():
+	bash('xdotool windowminimize ' + str(i))
+
+def raises(): #in realtà non serve a un cazzo ma vabè
+	bash('xdotool windowraise ' + str(i))
+
+def focus():
+	bash('xdotool windowactivate ' + str(i))
+
+
+
+def hideWindow():
+	minimize()
+
+def showWindow():
+	raises()
 	msg = bash('xdotool windowactivate ' + i, read=True)
 	if msg == '':
 		print(f"{appName} has been closed but it's still running in the background.\nrerunning...")
-		runWAhidden()
+		if cmdToRaise: bash(cmd)
+		else: runHidden()
+		
+		focusWindow()
 
-def runWAhidden():
+def runHidden():
 	subprocess.Popen([cmd])
 
-def focusWA():
-	IDs = bash(f"xdotool search --name {appName}", read=True).strip().split('\n')
-	i = IDs[-1]
-	bash('xdotool windowactivate ' + i)
+def focusWindow():
+	focus()
+	
+def raiseWindow():
+	raises()
+
+
 
 def main():
 	running, visible, focused = isRunning(), isVisible(), isFocused()
+	
 	if running:
+		print("i=", i)
 		if visible:
 			if focused:
-				hideWA()
+				print("hiding...")
+				hideWindow()
 			else:
-					focusWA()
-
+				print("focusing...")
+				focusWindow()
 		else:
-			showWA()
+			print("showing...")
+			showWindow()
+			#raiseWindow()
+			#focusWindow()
 	else:
-		runWAhidden()
-		#runWAhidden()
+		print("running hidden...")
+		runHidden()
 		exit()
-main()
+		
+if __name__ == "__main__":
+	main()
