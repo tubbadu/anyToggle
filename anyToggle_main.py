@@ -67,7 +67,8 @@ def main():
 	else:
 		cmdToRaise = False
 	operate(appName, cmd, cmdToRaise)
-	subprocess.Popen(["/home/tubbadu/code/GitHub/anyToggle/minimizeExcluded.py", appName])
+	if "--no-interact" not in sys.argv:
+		subprocess.Popen(["/home/tubbadu/code/GitHub/anyToggle/minimizeExcluded.py", appName])
 
 	#minimizeExcluded(excludeAppNames)
 	
