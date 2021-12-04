@@ -2,7 +2,7 @@
 
 toggle ANY application!
 
-## dependencies:
+## dependenciesss:
 
 + a linux distribution (successfully tested on Kubuntu 21.04)
 + `python3` 
