@@ -43,25 +43,38 @@ def operate(appName, cmd, cmdToRaise):
 			#focusWindow()
 	else:
 		print("running hidden...")
-		runHidden(ID)
+		runHidden(cmd)
 		exit()
+
+
+def alignToPanel():
+	filepath = "/home/tubbadu/code/GitHub/panelToggle/panelHeight.txt"
+	with open(filepath, "r") as fp:
+		size = int(fp.read().strip())
+	for app in ["qalculate", "ferdi", "whatsdesk", "telegram"]:
+		bash(f'"/home/tubbadu/code/GitHub/panelToggle/windowMove.py" {app} {size-1} 0')
+
 
 def main():
 	cmd = sys.argv[1] #"ferdi" #command to launch the program (may be a path to an appimage or a script as well)
 	appName = sys.argv[2] #"ferdi" #name of the application to search for and raise/minimize
-	excludeAppNames = "ferdi/telegram/cicciopasticcio/stograncazzo"#sys.argv[3] #list of application names separated by a '/' to be minimized
-	excludeAppNames = excludeAppNames.split("/")
-	excludeAppNames.remove(appName)
+	#excludeAppNames = "ferdi/telegram/whatsdesk/stograncazzo"#sys.argv[3] #list of application names separated by a '/' to be minimized
+	#excludeAppNames = excludeAppNames.split("/")
+	#if appName in excludeAppNames and "--alone" not in sys.argv:
+	#	excludeAppNames.remove(appName)
 	if "--ctr" in sys.argv:
 		cmdToRaise = True
 	else:
 		cmdToRaise = False
-	
-	minimizeExcluded(excludeAppNames)
 	operate(appName, cmd, cmdToRaise)
+	subprocess.Popen(["/home/tubbadu/code/GitHub/anyToggle/minimizeExcluded.py", appName])
 
-
+	#minimizeExcluded(excludeAppNames)
 	
+
+
+
+
 
 
 if __name__ == "__main__":
