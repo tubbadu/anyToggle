@@ -14,25 +14,25 @@ def bash(cmd, read=False):
 		return
 
 def getIDs(names):
-	print(names)
+	#print(names)
 	IDs = list()
 	for name in names:
 		try:
-			print(f"bash: xdotool search --name {name}")
-			i = bash(f"xdotool search --name {name}", read=True).strip().split('\n')[-1]
+	#		print(f"bash: xdotool search --name {name}")
+			i = bash(f"xdotool search --class {name}", read=True).strip().split('\n')[-1]
 		except:
 			i = 0
 		IDs.append(i)
 	return IDs
 
 def minimizeExcluded(excludeAppNames):
-	print("minimize excluded:", excludeAppNames)
+	#print("minimize excluded:", excludeAppNames)
 	for ID in getIDs(excludeAppNames):
-		print("minimizing:", ID)
+	#	print("minimizing:", ID)
 		if(ID): minimize(ID)
 
 
-excludeAppNames = "ferdi/telegram/whatsdesk/stograncazzo"#sys.argv[3] #list of application names separated by a '/' to be minimized
+excludeAppNames = "ferdi/telegram/whatsdesk/chromium-browser/stograncazzo"#sys.argv[3] #list of application names separated by a '/' to be minimized
 excludeAppNames = excludeAppNames.split("/")
 try:
 	appName = sys.argv[1]

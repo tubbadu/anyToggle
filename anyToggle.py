@@ -21,7 +21,7 @@ def bash(cmd, read=False):
 # ### ###
 
 def isRunning(appName): #even in the background
-	x = bash(f"pgrep {appName}", read=True)
+	x = bash(f"xdotool search --class {appName}", read=True) #bash(f"pgrep {appName}", read=True)
 	if not x:
 		print(f"not running")
 		return False
@@ -30,7 +30,7 @@ def isRunning(appName): #even in the background
 		return True
 
 def isVisible(appName):
-	x = bash(f"xdotool search --onlyvisible --name {appName}", read=True)
+	x = bash(f"xdotool search --onlyvisible --class {appName}", read=True)
 	if not x:
 		print('not visible')
 		return False
@@ -38,7 +38,17 @@ def isVisible(appName):
 		print("visible")
 		return True
 
-def isFocused(appName):
+def isFocused(appName, ID):
+	focusedID = str(bash("xdotool getwindowfocus", read=True)).strip()
+	print("checking for focus: ", focusedID, ID)
+	if focusedID == ID:
+		print("focused")
+		return True
+	else:
+		print("not focused")
+		return False
+
+def isFocusedOLD(appName):
 	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
 	if appName in x.lower():
 		print("focused")
@@ -47,15 +57,22 @@ def isFocused(appName):
 		print("not focused")
 		return False
 
-
 def minimize(ID):
-	bash('xdotool windowminimize ' + str(ID))
+	bash('xdotool windowminimize ' + ID)
 
 def raises(ID): #in realtà non serve a un cazzo ma vabè
-	bash('xdotool windowraise ' + str(ID))
+	bash('xdotool windowraise ' + ID)
 
 def focus(ID):
-	bash('xdotool windowactivate ' + str(ID))
+	print("xdotool windowactivate " + ID)
+	bash('xdotool windowactivate ' + ID)
+	return True
+	if(len(str(bash('xdotool windowactivate ' + ID, read=True)).strip()) <= 1):
+		print('CASO1')
+		return True
+	else:
+		print("CASO2")
+		return False
 
 
 
@@ -75,7 +92,7 @@ def runHidden(cmd):
 
 
 
-def main():
+def main(): #not used hehehe I know it won't work
 	running, visible, focused = isRunning(), isVisible(), isFocused()
 	
 	if running:
