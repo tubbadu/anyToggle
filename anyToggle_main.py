@@ -53,7 +53,7 @@ def operateNoBackground(appName, cmd):
 	print("ID2=", ID)
 	if(type(ID) is list):
 		if(len(ID) > 1): print("beware, something is wrong I can feel it:", ID)
-		ID = ID[0]
+		ID = ID[-1] #changed here
 	
 	focused = isFocused(appName, ID)
 	
