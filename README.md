@@ -22,6 +22,7 @@ chmod +x minimizeExcluded.py
 
 + *[optional]* set a window rule to exclude your application from task manager and from window switcher
 + *[optional]* if you want, fix its position (also as a window rule) and remove the border and buttons
++ assign the script to a keyboard shortcut or a panel button and enjoy!
 
 ## usage:
 
