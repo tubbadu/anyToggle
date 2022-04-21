@@ -1,119 +1,87 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 
+
+#TODO 
+# 
+# sistemare l'allineamento delle app
+# 
+# aggiungere la possibilità di specificare negli argomenti name="appname" and/or class="appclass"
+# 
+#TODO
+
+from anyToggle_functions import *
+from minimizeExcluded import *
 
 import os
 import subprocess
 import sys
 
-def bash(cmd, read=False):
-	if read:
-		try:
-			x = subprocess.check_output(cmd, shell=True).decode("utf-8")
-		except:
-			x = False
-		return x
-	else:
-		os.system(cmd)
-		return
+def help():
+	print('AnyToggle by Tubbadu\n\nusage:\n path/to/script/anyToggle.py --name "app name" --class "app class" --cmd "cmd_to_run_app" [--raise-cmd "cmd_to_raise_app"] [--no-interact]\n\n see https://github.com/tubbadu/anyToggle for more information')
+	exit()
 
-
-
-
-# ### ###
-
-def isRunning(appName): #even in the background
-	x = bash(f"xdotool search --class {appName}", read=True) #bash(f"pgrep {appName}", read=True)
-	if not x:
-		print(f"not running")
-		return False
-	else:
-		print("running")
-		return True
-
-def isVisible(appName):
-	x = bash(f"xdotool search --onlyvisible --class {appName}", read=True)
-	if not x:
-		print('not visible')
-		return False
-	else:
-		print("visible")
-		return True
-
-def isFocused(appName, ID):
-	focusedID = str(bash("xdotool getwindowfocus", read=True)).strip()
-	print("checking for focus: ", focusedID, ID)
-	if focusedID == ID:
-		print("focused")
-		return True
-	else:
-		print("not focused")
-		return False
-
-def isFocusedOLD(appName):
-	x = bash("ID=$(xdotool getwindowfocus) && xdotool getwindowname $ID", read=True)
-	if appName in x.lower():
-		print("focused")
-		return True
-	else:
-		print("not focused")
-		return False
-
-def minimize(ID):
-	bash('xdotool windowminimize ' + ID)
-
-def raises(ID): #in realtà non serve a un cazzo ma vabè
-	bash('xdotool windowraise ' + ID)
-
-def focus(ID):
-	print("xdotool windowactivate " + ID)
-	bash('xdotool windowactivate ' + ID)
-	return True
-	if(len(str(bash('xdotool windowactivate ' + ID, read=True)).strip()) <= 1):
-		print('CASO1')
-		return True
-	else:
-		print("CASO2")
-		return False
-
-
-
-def showWindow(ID, cmd, cmdToRaise):
-	raises(ID)
-	msg = bash('xdotool windowactivate ' + ID, read=True)
-	if msg == '':
-		#print(f"{appName} has been closed but it's still running in the background.\nrerunning...")
-		if cmdToRaise: bash(cmd)
-		else: runHidden(cmd)
-		
-		focus(ID)
-
-def runHidden(cmd):
-	subprocess.Popen([cmd])
-
-
-
-
-def main(): #not used hehehe I know it won't work
-	running, visible, focused = isRunning(), isVisible(), isFocused()
-	
-	if running:
-		print("i=", i)
-		if visible:
-			if focused:
-				print("hiding...")
-				hideWindow()
-			else:
-				print("focusing...")
-				focusWindow()
+def toggle(c, n, cmd, raiseCmd, NoInteract):
+	running, Id = isRunning(n, c) #running has the id, should change with a proper name
+	#print("<", isRunning(n, c), ">")
+	#print(Id)
+	if(running):
+		focused = isFocused(Id)
+		if(focused):
+			#minimize
+			minimize(Id)
 		else:
-			print("showing...")
-			showWindow()
-			#raiseWindow()
-			#focusWindow()
+			#activate
+			if(raiseCmd == None):
+				focus(Id)
+			else:
+				runHidden(raiseCmd)
 	else:
-		print("running hidden...")
-		runHidden()
-		exit()
-		
+		runHidden(cmd)
+
+	if(not NoInteract):
+		minimizeExcluded(Id)
+
+def main():
+	# flags: --class --name --cmd --raise-cmd --no-interact
+	args = sys.argv[1:]
+	Class = None
+	Name = None
+	Cmd = None
+	RaiseCmd = None
+	NoInteract = False
+
+	if "-h" in args or "--help" in args:
+		help()
+
+	if "--class" in args:
+		Class = args[args.index("--class") + 1]
+	elif "-c" in args:
+		Class = args[args.index("-c") + 1]
+	
+	if "--name" in args:
+		Name = args[args.index("--name") + 1]
+	elif "-n" in args:
+		Name = args[args.index("-n") + 1]
+	
+	if "--cmd" in args:
+		Cmd = args[args.index("--cmd") + 1]
+	
+	if "--raise-cmd" in args:
+		RaiseCmd = args[args.index("--raise-cmd") + 1]
+	
+	if "--no-interact" in args:
+		NoInteract = True
+	
+	if Class == None or Name == None:
+		print("parameter error: Must specify --class [class] and --name [name]")
+		exit(1)
+	else:
+		toggle(Class, Name, Cmd, RaiseCmd, NoInteract)
+
+
+
+
+
+
+
 if __name__ == "__main__":
-	pass
-	#main()
+	main()

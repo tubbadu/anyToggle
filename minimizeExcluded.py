@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-from anyToggle import *
+from anyToggle_functions import *
 
+excludeApps = [ "telegram/telegram",
+				"whatsapp/ffpwa"]
 
 def bash(cmd, read=False):
 	if read:
@@ -13,32 +15,14 @@ def bash(cmd, read=False):
 		os.system(cmd)
 		return
 
-def getIDs(names):
-	#print(names)
-	IDs = list()
-	for name in names:
-		try:
-	#		print(f"bash: xdotool search --name {name}")
-			i = bash(f"xdotool search --class {name}", read=True).strip().split('\n')[-1]
-		except:
-			i = 0
-		IDs.append(i)
-	return IDs
+def minimizeExcluded(excluded=None):
+	print("minimizing all except:", excluded)
+	for app in excludeApps:
+		print(app)
+		ID = getID(app.split('/')[0], app.split('/')[1])
+		print(ID)
+		if (ID != "False" and ID != excluded):
+			minimize(ID)
 
-def minimizeExcluded(excludeAppNames):
-	#print("minimize excluded:", excludeAppNames)
-	for ID in getIDs(excludeAppNames):
-	#	print("minimizing:", ID)
-		if(ID): minimize(ID)
-
-
-excludeAppNames = "ferdi/telegram/whatsdesk/chromium-browser/stograncazzo"#sys.argv[3] #list of application names separated by a '/' to be minimized
-excludeAppNames = excludeAppNames.split("/")
-try:
-	appName = sys.argv[1]
-	if appName in excludeAppNames and "--alone" not in sys.argv:
-		excludeAppNames.remove(appName)
-except:
-	appName = "stocazzo"
-
-minimizeExcluded(excludeAppNames)
+if __name__ == "__main__":
+	minimizeExcluded()
