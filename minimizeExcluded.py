@@ -2,7 +2,8 @@
 from anyToggle_functions import *
 
 excludeApps = [ "telegram/telegram",
-				"whatsapp/ffpwa"]
+				"whatsapp/ffpwa",
+				"whatsie/whatsie"]
 
 def bash(cmd, read=False):
 	if read:
