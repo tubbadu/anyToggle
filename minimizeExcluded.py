@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from anyToggle_functions import *
 
-excludeApps = [ "telegram/telegram",
+excludeApps = [ " /telegram",
 				"whatsapp/ffpwa",
 				"whatsie/whatsie"]
 
