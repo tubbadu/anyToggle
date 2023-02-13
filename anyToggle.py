@@ -61,6 +61,8 @@ def main():
 		Name = args[args.index("--name") + 1]
 	elif "-n" in args:
 		Name = args[args.index("-n") + 1]
+	else:
+		Name = ""
 	
 	if "--cmd" in args:
 		Cmd = args[args.index("--cmd") + 1]

@@ -17,8 +17,8 @@ def bash(cmd, read=False):
 
 
 def getID(n, c):
-	xSearchClass = str(bash(f"xdotool search --class {c}", read=True)).strip().split()
-	xSearchName = str(bash(f"xdotool search --name {n}", read=True)).strip().split()
+	xSearchClass = str(bash(f"xdotool search --class \"{c}\"", read=True)).strip().split()
+	xSearchName = str(bash(f"xdotool search --name \"{n}\"", read=True)).strip().split()
 	for xc in xSearchClass[::-1]: #because some apps have multiple istances visibles, but just the last one is the GUI one
 		for xn in xSearchName:
 			if xc == xn:
