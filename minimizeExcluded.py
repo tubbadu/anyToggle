@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 from anyToggle_functions import *
 
-excludeApps = [ " /telegram",
+excludeApps = [ "/telegram",
 				"whatsapp/ffpwa",
-				"whatsie/whatsie"]
+				"whatsie/whatsie",
+				"/whatsappweb-nativefier-d40211"]
 
 def bash(cmd, read=False):
 	if read:
