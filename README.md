@@ -2,6 +2,8 @@
 
 toggle ANY application! (X11 only)
 
+> *NOTE:* I will no longer take care of this project, as I'm developing [KToggle](https://github.com/tubbadu/ktoggle) that does work under both Xorg and Wayland (requires kwin tho)
+
 ## dependencies:
 
 + `python3` 
